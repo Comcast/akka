@@ -147,7 +147,7 @@ private[typed] class ActorCell[T](
     nextName += 1
     val ref = new FunctionRef[U](
       self.path / name,
-      (msg, _) ⇒ send(f(msg)),
+      (msg, _) ⇒ { val m = f(msg); if (m != null) send(m) },
       (self) ⇒ sendSystem(DeathWatchNotification(self, null)))
     childrenMap = childrenMap.updated(name, ref)
     ref

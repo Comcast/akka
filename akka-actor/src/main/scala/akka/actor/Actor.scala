@@ -96,8 +96,8 @@ final case class ActorIdentity(correlationId: Any, ref: Option[ActorRef]) {
 @SerialVersionUID(1L)
 final case class Terminated private[akka] (@BeanProperty actor: ActorRef)(
   @BeanProperty val existenceConfirmed: Boolean,
-  @BeanProperty val addressTerminated:  Boolean)
-  extends AutoReceivedMessage with PossiblyHarmful with DeadLetterSuppression
+  @BeanProperty val addressTerminated: Boolean)
+    extends AutoReceivedMessage with PossiblyHarmful with DeadLetterSuppression
 
 /**
  * INTERNAL API
@@ -164,7 +164,7 @@ final case class InvalidActorNameException(message: String) extends AkkaExceptio
  */
 @SerialVersionUID(1L)
 class ActorInitializationException protected (actor: ActorRef, message: String, cause: Throwable)
-  extends AkkaException(ActorInitializationException.enrichedMessage(actor, message), cause) {
+    extends AkkaException(ActorInitializationException.enrichedMessage(actor, message), cause) {
   def getActor: ActorRef = actor
 }
 object ActorInitializationException {
@@ -363,7 +363,7 @@ object Actor {
    * Default placeholder (null) used for "!" to indicate that there is no sender of the message,
    * that will be translated to the receiving system's deadLetters.
    */
-  final val noSender = null.asInstanceOf[ActorRef] // avoid type ascription: compile-time constant
+  final val noSender = null: ActorRef // avoid type ascription: compile-time constant
 }
 
 /**

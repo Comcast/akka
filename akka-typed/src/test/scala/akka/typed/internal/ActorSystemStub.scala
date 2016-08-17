@@ -10,8 +10,8 @@ import com.typesafe.config.ConfigFactory
 import java.util.concurrent.ThreadFactory
 
 private[typed] class ActorSystemStub(val name: String)
-  extends ActorRef[Nothing](a.RootActorPath(a.Address("akka", name)) / "user")
-  with ActorSystem[Nothing] with ActorRefImpl[Nothing] {
+    extends ActorRef[Nothing](a.RootActorPath(a.Address("akka", name)) / "user")
+    with ActorSystem[Nothing] with ActorRefImpl[Nothing] {
 
   override val settings: a.ActorSystem.Settings = new a.ActorSystem.Settings(getClass.getClassLoader, ConfigFactory.empty, name)
 
@@ -50,6 +50,9 @@ private[typed] class ActorSystemStub(val name: String)
   override def threadFactory: java.util.concurrent.ThreadFactory = new ThreadFactory {
     override def newThread(r: Runnable): Thread = new Thread(r)
   }
+
+  val receptionistInbox = Inbox[patterns.Receptionist.Command]("receptionist")
+  override def receptionist: ActorRef[patterns.Receptionist.Command] = receptionistInbox.ref
 
   override def printTree: String = "no tree for ActorSystemStub"
 }

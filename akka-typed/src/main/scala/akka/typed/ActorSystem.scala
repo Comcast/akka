@@ -105,6 +105,11 @@ trait ActorSystem[-T] extends ActorRef[T] { this: internal.ActorRefImpl[T] ⇒
   def deadLetters[U]: ActorRef[U]
 
   /**
+   * Return a reference to this system’s [[akka.typed.patterns.Receptionist$]]
+   */
+  def receptionist: ActorRef[patterns.Receptionist.Command]
+
+  /**
    * Create a string representation of the actor hierarchy within this system.
    *
    * The format of the string is subject to change, i.e. no stable “API”.
@@ -121,8 +126,8 @@ object ActorSystem {
    * [[akka.actor.Actor]] instances.
    */
   def apply[T](name: String, guardianProps: Props[T],
-               config:           Option[Config]           = None,
-               classLoader:      Option[ClassLoader]      = None,
+               config: Option[Config] = None,
+               classLoader: Option[ClassLoader] = None,
                executionContext: Option[ExecutionContext] = None): ActorSystem[T] = {
     val cl = classLoader.getOrElse(akka.actor.ActorSystem.findClassLoader())
     val appConfig = config.getOrElse(ConfigFactory.load(cl))
@@ -135,8 +140,8 @@ object ActorSystem {
    * system typed and untyped actors can coexist.
    */
   def adapter[T](name: String, guardianProps: Props[T],
-                 config:           Option[Config]           = None,
-                 classLoader:      Option[ClassLoader]      = None,
+                 config: Option[Config] = None,
+                 classLoader: Option[ClassLoader] = None,
                  executionContext: Option[ExecutionContext] = None): ActorSystem[T] = {
     val cl = classLoader.getOrElse(akka.actor.ActorSystem.findClassLoader())
     val appConfig = config.getOrElse(ConfigFactory.load(cl))

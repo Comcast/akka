@@ -28,7 +28,7 @@ private[typed] trait ActorRefImpl[-T] extends ActorRef[T] {
  * A local ActorRef that is backed by an asynchronous [[ActorCell]].
  */
 private[typed] class LocalActorRef[-T](_path: a.ActorPath, cell: ActorCell[T])
-  extends ActorRef[T](_path) with ActorRefImpl[T] {
+    extends ActorRef[T](_path) with ActorRefImpl[T] {
   override def tell(msg: T): Unit = cell.send(msg)
   override def sendSystem(signal: SystemMessage): Unit = cell.sendSystem(signal)
   final override def isLocal: Boolean = true
@@ -41,7 +41,7 @@ private[typed] class LocalActorRef[-T](_path: a.ActorPath, cell: ActorCell[T])
  * terminates (meaning: no Hawking radiation).
  */
 private[typed] object BlackholeActorRef
-  extends ActorRef[Any](a.RootActorPath(a.Address("akka.typed.internal", "blackhole"))) with ActorRefImpl[Any] {
+    extends ActorRef[Any](a.RootActorPath(a.Address("akka.typed.internal", "blackhole"))) with ActorRefImpl[Any] {
   override def tell(msg: Any): Unit = ()
   override def sendSystem(signal: SystemMessage): Unit = ()
   final override def isLocal: Boolean = true
@@ -53,10 +53,10 @@ private[typed] object BlackholeActorRef
  * This reference cannot watch other references.
  */
 private[typed] final class FunctionRef[-T](
-  _path:      a.ActorPath,
-  send:       (T, FunctionRef[T]) ⇒ Unit,
+  _path: a.ActorPath,
+  send: (T, FunctionRef[T]) ⇒ Unit,
   _terminate: FunctionRef[T] ⇒ Unit)
-  extends WatchableRef[T](_path) {
+    extends WatchableRef[T](_path) {
 
   override def tell(msg: T): Unit =
     if (isAlive)
@@ -82,7 +82,7 @@ private[typed] final class FunctionRef[-T](
 /**
  * The mechanics for synthetic ActorRefs that have a lifecycle and support being watched.
  */
-private[typed] abstract class WatchableRef[-T](_p: a.ActorPath) extends ActorRef[T](_p) with ActorRefImpl[T] {
+private[typed] abstract class WatchableRef[-T](_path: a.ActorPath) extends ActorRef[T](_path) with ActorRefImpl[T] {
   import WatchableRef._
 
   /**

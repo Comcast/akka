@@ -16,8 +16,8 @@ import scala.concurrent.ExecutionContextExecutor
  * most circumstances.
  */
 private[typed] class ActorSystemAdapter[-T](val untyped: a.ActorSystemImpl)
-  extends ActorRef[T](a.RootActorPath(a.Address("akka", untyped.name)) / "user")
-  with ActorSystem[T] with internal.ActorRefImpl[T] {
+    extends ActorRef[T](a.RootActorPath(a.Address("akka", untyped.name)) / "user")
+    with ActorSystem[T] with internal.ActorRefImpl[T] {
 
   // Members declared in akka.typed.ActorRef
   override def tell(msg: T): Unit = untyped.guardian ! msg
@@ -49,6 +49,9 @@ private[typed] class ActorSystemAdapter[-T](val untyped: a.ActorSystemImpl)
   override def threadFactory: java.util.concurrent.ThreadFactory = untyped.threadFactory
   override def uptime: Long = untyped.uptime
   override def printTree: String = untyped.printTree
+
+  override val receptionist: ActorRef[patterns.Receptionist.Command] =
+    ActorRefAdapter(untyped.systemActorOf(PropsAdapter(Props(patterns.Receptionist.behavior)), "receptionist"))
 
   import akka.dispatch.ExecutionContexts.sameThreadExecutionContext
 
